@@ -16,16 +16,15 @@ int main(void) {
     cin >> N;
     for (int i = 0; i < N; i++) {
         vector<char> stack;
-        stack.push_back(0);
         cin >> s;
         for (int j = 0; j < s.size(); j++) {
-            if (stack.back() == s[j]) {
+            if (stack.size() && stack.back() == s[j]) {
                 stack.pop_back();
             } else {
                 stack.push_back(s[j]);
             }
         }
-        if (stack.size() == 1)
+        if (stack.empty())
             cnt++;
     }
     cout << cnt << "\n";
