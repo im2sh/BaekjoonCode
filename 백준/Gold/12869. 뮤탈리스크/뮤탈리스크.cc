@@ -2,7 +2,7 @@
 #include <queue>
 #include <algorithm>
 
-#define SIZE 64
+#define SIZE 61
 
 using namespace std;
 int N;
@@ -35,19 +35,19 @@ int solve(int a, int b, int c) {
         if (visited[0][0][0])
             break;
         for (int i = 0; i < 6; i++) {
-//            int na = x - attack[i][0];
-//            int nb = y - attack[i][1];
-//            int nc = z - attack[i][2];
-//
-//            if (na < 0)
-//                na = 0;
-//            if (nb < 0)
-//                nb = 0;
-//            if (nc < 0)
-//                nc = 0;
-            int na = max(0, x - attack[i][0]);
-            int nb = max(0, y - attack[i][1]);
-            int nc = max(0, z - attack[i][2]);
+            int na = x - attack[i][0];
+            int nb = y - attack[i][1];
+            int nc = z - attack[i][2];
+
+            if (na < 0)
+                na = 0;
+            if (nb < 0)
+                nb = 0;
+            if (nc < 0)
+                nc = 0;
+//            int na = max(0, x - attack[i][0]);
+//            int nb = max(0, y - attack[i][1]);
+//            int nc = max(0, z - attack[i][2]);
 
             if (visited[na][nb][nc])
                 continue;
