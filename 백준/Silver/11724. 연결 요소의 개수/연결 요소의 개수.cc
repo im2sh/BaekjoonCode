@@ -1,40 +1,59 @@
 #include <iostream>
-#include <vector>
+
+#define MAX_VER 1004
 
 using namespace std;
 
-bool flag[1001] = {false, };
-vector<vector<int>> graph;
-int cnt = 0;
+int N, M;
+int graph[MAX_VER][MAX_VER];
+int visited[MAX_VER];
 
-void dfs(int start){
-    flag[start] = true;
-    for(int i = 0; i < graph[start].size();i++){
-        int next_idx = graph[start][i];
-        if(!flag[next_idx])
-            dfs(next_idx);
+void FastIO() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+}
+
+void Init() {
+    cin >> N >> M;
+    int y, x;
+    for (int i = 0; i < M; i++) {
+        cin >> y >> x;
+        graph[y - 1][x - 1] = 1;
+        graph[x - 1][y - 1] = 1;
     }
 }
 
-
-int main(void){
-    ios_base ::sync_with_stdio(false);
-    cin.tie(NULL);
-    int N,M;
-    int x,y;
-    cin >> N >> M;
-    graph.assign(N+1, vector<int>(0,0));
-    for(int i = 0; i< M;i++){
-        cin >> x >> y;
-        graph[x].push_back(y);
-        graph[y].push_back(x);
+void dfs(int start) {
+    visited[start] = 1;
+    for (int i = 0; i < N; i++) {
+        if (graph[start][i] && !visited[i]) {
+            visited[i] = 1;
+            dfs(i);
+        }
     }
+}
 
-    for(int i = 1; i <= N; i++){
-        if(!flag[i]){
+void display() {
+    for (int i = 0; i < N; i++) {
+        cout << visited[i] << " ";
+    }
+}
+
+void solve() {
+    int cnt = 0;
+    for (int i = 0; i < N; i++) {
+        if (!visited[i]) {
             dfs(i);
             cnt++;
         }
     }
-    cout << cnt <<"\n";
+    cout << cnt << "\n";
+}
+
+int main(void) {
+    FastIO();
+    Init();
+    solve();
+    return 0;
 }
