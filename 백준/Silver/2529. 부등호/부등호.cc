@@ -24,7 +24,7 @@ void Init() {
     }
 }
 
-bool good(char a, char b, char op) {
+bool cmp(char a, char b, char op) {
     if (a < b && op == '<')
         return true;
     if (a > b && op == '>')
@@ -40,7 +40,7 @@ void solve(int idx, string num) {
     for (int i = 0; i <= 9; i++) {
         if (visited[i])
             continue;
-        if (idx == 0 || good(num[idx - 1], i + '0', op[idx - 1])) {
+        if (idx == 0 || cmp(num[idx - 1], i + '0', op[idx - 1])) {
             visited[i] = 1;
             solve(idx + 1, num + to_string(i));
             visited[i] = 0;
