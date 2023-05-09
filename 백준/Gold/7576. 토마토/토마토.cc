@@ -12,7 +12,6 @@ vector<pair<int, int>> start;
 int tomato[1004][1004];
 int visited[1004][1004];
 int ret = 0;
-bool isTomato = false;
 
 void FastIO() {
     ios_base::sync_with_stdio(false);
@@ -27,9 +26,6 @@ void Init() {
             cin >> tomato[y][x];
             if (tomato[y][x] == 1) {
                 start.push_back(make_pair(y, x));
-                isTomato = true;
-            } else if (tomato[y][x] == 0) {
-                isTomato = true;
             }
         }
     }
@@ -83,10 +79,6 @@ void solve() {
 int main(void) {
     FastIO();
     Init();
-    if (!isTomato) {
-        cout << "-1";
-        return 0;
-    }
     if (start.size() == 0) {
         cout << "-1";
         return 0;
