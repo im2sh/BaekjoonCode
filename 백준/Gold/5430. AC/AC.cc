@@ -77,7 +77,6 @@ void cal() {
             cout << arr[i] << ",";
         else
             cout << arr[i];
-        //arr.pop_front();
     }
     cout << "]\n";
 }
