@@ -26,10 +26,8 @@ void solve() {
                 cnt = st.top().second + 1;
             else
                 cnt = 1;
-
             st.pop();
         }
-
         if (st.size())
             ret++;
         st.push({temp, cnt});
