@@ -15,16 +15,16 @@ void FastIO() {
 }
 
 void Init() {
-    cin >> N;
     int x, y;
+    cin >> N;
     for (int i = 0; i < N; i++) {
         cin >> x >> y;
-        room.push_back({y, x}); // sort 편하게 x : 시작 시간 y : 종료 시간
+        room.push_back({y, x});
     }
-    sort(room.begin(), room.end());
 }
 
 void solve() {
+    sort(room.begin(), room.end());
     int from = room[0].second;
     int to = room[0].first;
     for (int i = 1; i < N; i++) {
@@ -36,7 +36,6 @@ void solve() {
     }
     cout << ret << "\n";
 }
-
 
 int main(void) {
     FastIO();
