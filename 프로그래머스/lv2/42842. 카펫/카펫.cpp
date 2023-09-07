@@ -4,17 +4,6 @@
 
 using namespace std;
 
-int findMaxNum(int sum){
-    int maxNum = 0;
-    for(int i = 2; i < sum; i++){
-        if(sum%i==0){
-            maxNum = i;
-        }
-    }
-    
-    return maxNum;
-}
-
 vector<int> solution(int brown, int yellow) {
     vector<int> answer;
     int w = 0;
