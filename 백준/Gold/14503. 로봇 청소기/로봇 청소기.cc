@@ -53,7 +53,7 @@ void solve() {
             int dir = (robot.second + 2) % 4;
             int ny = cy + dy[dir];
             int nx = cx + dx[dir];
-            
+
             if (ny < 0 || ny >= N || nx < 0 || nx >= M)
                 return;
             if (board[ny][nx] != 1) {
