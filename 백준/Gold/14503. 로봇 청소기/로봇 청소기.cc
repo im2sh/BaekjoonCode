@@ -45,8 +45,6 @@ void solve() {
 
             if (ny < 0 || ny >= N || nx < 0 || nx >= M)
                 continue;
-            if (board[ny][nx] == -1)
-                continue;
             if (board[ny][nx] == 0)
                 flag = false;
         }
@@ -55,6 +53,8 @@ void solve() {
             int dir = (robot.second + 2) % 4;
             int ny = cy + dy[dir];
             int nx = cx + dx[dir];
+            if(board[ny][nx] == 1)
+                break;
             if (ny < 0 || ny >= N || nx < 0 || nx >= M)
                 break;
             if (board[ny][nx] != 1) {
@@ -62,7 +62,7 @@ void solve() {
                 robot.first.second = nx;
                 continue;
             }
-            break;
+            //break;
         }
 
         int dir = (robot.second + 3) % 4;
