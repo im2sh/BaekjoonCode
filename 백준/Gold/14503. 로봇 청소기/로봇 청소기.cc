@@ -53,16 +53,15 @@ void solve() {
             int dir = (robot.second + 2) % 4;
             int ny = cy + dy[dir];
             int nx = cx + dx[dir];
-            if(board[ny][nx] == 1)
-                break;
+            
             if (ny < 0 || ny >= N || nx < 0 || nx >= M)
-                break;
+                return;
             if (board[ny][nx] != 1) {
                 robot.first.first = ny;
                 robot.first.second = nx;
                 continue;
             }
-            //break;
+            break;
         }
 
         int dir = (robot.second + 3) % 4;
