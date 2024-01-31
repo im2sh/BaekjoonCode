@@ -17,12 +17,8 @@ void Init() {
 void solve() {
     while (TC--) {
         cin >> x >> y;
+        
         int dist = y - x;
-        if (dist <= 3) {
-            cout << dist << '\n';
-            continue;
-        }
-
         double midN = double(sqrt(dist));
         int basic = floor(midN);
         
