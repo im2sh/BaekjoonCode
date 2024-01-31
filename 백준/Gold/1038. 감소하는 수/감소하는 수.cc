@@ -9,7 +9,6 @@ int N;
 
 queue<ll> q;
 vector<ll> v;
-vector<ll> ret;
 
 void FastIO() {
     ios_base::sync_with_stdio(false);
@@ -22,7 +21,6 @@ void Init() {
     for (int i = 0; i < 10; i++) {
         q.push(i);
         v.push_back(i);
-        ret.push_back(i);
     }
 }
 
@@ -39,7 +37,6 @@ void solve() {
             if (temp % 10 > v[i]) {
                 ll nextNum = (temp * 10) + v[i];
                 q.push(nextNum);
-                ret.push_back(nextNum);
             } else {
                 break;
             }
