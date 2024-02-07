@@ -35,7 +35,6 @@ void Init() {
 
 void BFS(int y, int x) {
     q.push({y, x});
-    //visited[y][x] = 1;
     if (isExistsSword == true)
         visited[y][x] = sword_visited;
     else
@@ -67,17 +66,8 @@ void BFS(int y, int x) {
             }
         }
     }
-
 }
 
-void display() {
-    for (int y = 0; y < N; y++) {
-        for (int x = 0; x < M; x++) {
-            cout << visited[y][x] << ' ';
-        }
-        cout << '\n';
-    }
-}
 
 void solve() {
     BFS(0, 0);
@@ -89,7 +79,7 @@ void solve() {
         fill(&visited[0][0], &visited[0][0] + 101 * 101, 0);
         BFS(sword.first, sword.second);
     }
-    
+
     ret = min(ret, visited[N - 1][M - 1] - 1);
     if (ret <= T && ret != -1) {
         cout << ret;
