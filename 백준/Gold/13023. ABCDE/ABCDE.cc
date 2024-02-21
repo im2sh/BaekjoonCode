@@ -1,50 +1,59 @@
 #include <iostream>
 #include <vector>
-#include <cstring>
 
 using namespace std;
-bool flag[2001];
-bool result = false;
-vector<vector<int>> graph;
 
-void search_graph(int start, int depth){
-    if(depth == 4){
-        result = true;
-        return;
-    }
-    flag[start] = true;
+int N, M;
+int visited[2001];
+vector<int> graph[2001];
+bool flag = false;
 
-    for(int i = 0; i <graph[start].size();i++){
-        int next_idx = graph[start][i];
-        if(!flag[next_idx])
-            search_graph(next_idx,depth+1);
-    }
-
-    flag[start] = false;
+void FastIO() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
 }
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    int n = 0;
-    int m = 0;
-    int x,y;
-    cin >> n >> m;
-    graph.assign(n+1,vector<int>(0,0));
-    for(int i = 0;i < m;i++){
-        cin >> x >> y;
-        graph[x].push_back(y);
-        graph[y].push_back(x);
+void Init() {
+    int a, b;
+    cin >> N >> M;
+    for (int i = 0; i < M; i++) {
+        cin >> a >> b;
+        graph[a].push_back(b);
+        graph[b].push_back(a);
     }
+}
 
-    for(int i = 0; i < m; i++){
-        memset(flag,false,sizeof(flag));
-        search_graph(i,0);
-        if(result == true)
-            break;
+void dfs(int cur, int depth) {
+    if (depth == 4) {
+        flag = true;
+        return;
     }
-    cout << result << "\n";
+    visited[cur] = 1;
+    for (int i = 0; i < graph[cur].size(); i++) {
+        int next = graph[cur][i];
+        if (!visited[next]) {
+            dfs(next, depth + 1);
+        }
+    }
+    visited[cur] = 0;
+}
 
+void solve() {
+    for (int i = 0; i < M; i++) {
+        fill(&visited[0], &visited[0] + 2001, 0);
+        dfs(i, 0);
+        if (flag) {
+            cout << "1";
+            return;
+        }
+    }
+    cout << "0";
+}
+
+int main(void) {
+    FastIO();
+    Init();
+    solve();
     return 0;
-
 }
