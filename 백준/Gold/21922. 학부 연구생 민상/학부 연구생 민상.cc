@@ -3,8 +3,8 @@
 #include <queue>
 
 using namespace std;
-const int dy[4] = {-1, 0, 1, 0};
-const int dx[4] = {0, 1, 0, -1};
+const int dy[4] = {-1, 1, 0, 0};
+const int dx[4] = {0, 0, -1, 1};
 int N, M;
 int BOARD[2001][2001];
 int visisted[2001][2001][4];
@@ -49,23 +49,29 @@ void go(int y, int x) {
 
         ret[ny][nx] = 1;
         visisted[ny][nx][dir] = 1;
-        if (BOARD[ny][nx] == 1 && dir % 2 == 1)
-            continue;
-        else if (BOARD[ny][nx] == 2 && dir % 2 == 0)
-            continue;
-        else if (BOARD[ny][nx] == 3) {
-            if (dir < 2) {
-                dir = (dir + 1) % 2;
-            } else {
-                dir = 2 + (dir + 1) % 2;
-            }
-        } else if (BOARD[ny][nx] == 4) {
+
+        if (BOARD[ny][nx] == 1) {
+            if (dir == 2 || dir == 3)
+                continue;
+        } else if (BOARD[ny][nx] == 2) {
+            if (dir == 0 || dir == 1)
+                continue;
+        } else if (BOARD[ny][nx] == 3) {
             if (dir == 0)
                 dir = 3;
-            else if (dir == 3)
-                dir = 0;
             else if (dir == 1)
                 dir = 2;
+            else if (dir == 2)
+                dir = 1;
+            else
+                dir = 0;
+        } else if (BOARD[ny][nx] == 4) {
+            if (dir == 0)
+                dir = 2;
+            else if (dir == 1)
+                dir = 3;
+            else if (dir == 2)
+                dir = 0;
             else
                 dir = 1;
         }
