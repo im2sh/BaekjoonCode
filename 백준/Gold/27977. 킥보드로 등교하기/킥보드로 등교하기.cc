@@ -45,13 +45,11 @@ bool check(int mid) {
 }
 
 void solve() {
-    int diff = 0;
     int low = 0;
     int high = L;
-    int mid = 0;
 
     while (low <= high) {
-        mid = (low + high) / 2;
+        int mid = (low + high) / 2;
 
         if (check(mid)) {
             ret = min(ret, mid);
