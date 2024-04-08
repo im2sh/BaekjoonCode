@@ -49,10 +49,7 @@ void solve() {
     int low = 0;
     int high = L;
     int mid = 0;
-    for (int i = 1; i <= N + 1; i++) {
-        diff = max(diff, charger[i] - charger[i - 1]);
-    }
-    low = diff;
+
     while (low <= high) {
         mid = (low + high) / 2;
 
