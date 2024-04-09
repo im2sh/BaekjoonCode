@@ -10,8 +10,6 @@ class Solution {
     }
     
     public void go(int hp, int depth, int[][] dungeons){
-        if(depth > dungeons.length)
-            return;
         ret = Math.max(ret, depth);
         for(int i =0; i < dungeons.length; i++){
             if(!visited[i]){
