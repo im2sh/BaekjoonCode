@@ -1,181 +1,209 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
 #include <queue>
 
 using namespace std;
-int N, M, fuel, tp;
-pair<int, int> taxi;
-int people[21][21];
-int destination[21][21];
-vector<pair<int, pair<int, int>>> deee;
-int visited[21][21];
-bool flag = true;
 
-const int dy[4] = {1, -1, 0, 0};
-const int dx[4] = {0, 0, 1, -1};
+typedef struct info {
+	int idx, y, x, distance;
+	bool isDead;
+}Info;
+
+typedef struct taxi {
+	int y, x, fuel;
+}Taxi;
+
+const int dy[4] = { -1,1,0,0 };
+const int dx[4] = { 0,0,-1,1 };
+
+int N, M, ret;
+pair<int,int> BOARD[21][21];
+int visited[21][21];
+vector<Info> guestDistanceList;
+Info guest[404];
+Info destination[404];
+Taxi taxi;
 
 void FastIO() {
-    ios_base::sync_with_stdio(false);
-    cout.tie(nullptr);
-    cin.tie(nullptr);
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 }
 
 void Init() {
-    int ty, tx, a, b, c, d;
-    int temp;
-    cin >> N >> M >> fuel;
-    for (int y = 0; y < N; y++) {
-        for (int x = 0; x < N; x++) {
-            cin >> temp;
-            if (temp == 1) {
-                destination[y][x] = -1;
-                people[y][x] = destination[y][x];
-            }
-        }
-    }
-    cin >> ty >> tx;
-    taxi = {ty - 1, tx - 1};
-    for (int i = 0; i < M; i++) {
-        cin >> a >> b >> c >> d;
-        people[a - 1][b - 1] = i + 1;
-        destination[c - 1][d - 1] = i + 1;
-        deee.push_back({i + 1, {c - 1, d - 1}});
-    }
+	cin >> N >> M >> taxi.fuel;
+	for (int y = 0; y < N; y++) {
+		for (int x = 0; x < N; x++) {
+			cin >> BOARD[y][x].second;
+			BOARD[y][x].first = 0;
+		}
+	}
+	cin >> taxi.y >> taxi.x;
+	taxi.y--;
+	taxi.x--;
+
+	for (int i = 1; i <= M; i++) {
+		int gY, gX, desY, desX;
+		cin >> gY >> gX >> desY >> desX;
+		BOARD[gY - 1][gX - 1].second = 2;
+		BOARD[gY - 1][gX - 1].first = i;
+		guest[i] = {i, gY - 1,gX - 1, 0, false};
+		destination[i] = {i, desY - 1, desX - 1, 0, false};
+	}
 }
 
-void displayPeople() {
-    for (int y = 0; y < N; y++) {
-        for (int x = 0; x < N; x++) {
-            cout << people[y][x] << " ";
-        }
-        cout << "\n";
-    }
+bool isDead() {
+	for (int i = 1; i <= M; i++) {
+		if (guest[i].isDead == false)
+			return true;
+	}
+	return false;
 }
 
-void displayDes() {
-    for (int y = 0; y < N; y++) {
-        for (int x = 0; x < N; x++) {
-            cout << destination[y][x] << " ";
-        }
-        cout << "\n";
-    }
+bool cmp(Info a, Info b) {
+	if(a.distance == b.distance) {
+		if (a.y == b.y) {
+			return a.x < b.x;
+		}
+		return a.y < b.y;
+	}
+	return a.distance < b.distance;
+}
+void display2() {
+	for (int y = 0; y < N; y++) {
+		for (int x = 0; x < N; x++) {
+			cout << BOARD[y][x].first << ' ';
+		}
+		cout << '\n';
+	}
+	cout << '\n';
 }
 
-void takePeople(pair<int, int> t) {
-    int cy = taxi.first;
-    int cx = taxi.second;
-    int target = 987654321;
-    queue<pair<int, int>> q;
-    q.push({cy, cx});
-    visited[cy][cx] = 1;
-    while (q.size()) {
-        cy = q.front().first;
-        cx = q.front().second;
-        q.pop();
 
-        for (int dir = 0; dir < 4; dir++) {
-            int ny = cy + dy[dir];
-            int nx = cx + dx[dir];
+void findGuest() {
+	fill(&visited[0][0], &visited[0][0] + 21 * 21, 0);
+	guestDistanceList.clear();
+	queue<pair<int, int>> q;
+	q.push({ taxi.y, taxi.x });
+	visited[taxi.y][taxi.x] = 1;
+	guest[BOARD[taxi.y][taxi.x].first].distance = 1;
+	while(q.size()){
+		int cy = q.front().first;
+		int cx = q.front().second;
+		q.pop();
 
-            if (ny < 0 || ny >= N || nx < 0 || nx >= N || visited[ny][nx] || people[ny][nx] == -1)
-                continue;
-            q.push({ny, nx});
-            visited[ny][nx] = visited[cy][cx] + 1;
-        }
-    }
+		for (int dir = 0; dir < 4; dir++) {
+			int ny = cy + dy[dir];
+			int nx = cx + dx[dir];
 
-    for (int y = 0; y < N; y++) {
-        for (int x = 0; x < N; x++) {
-            if (people[y][x] == -1 || people[y][x] == 0)
-                continue;
-            if (visited[y][x] < target) {
-                taxi = {y, x};
-                target = visited[y][x];
-                tp = people[y][x];
-            }
-        }
-    }
-    if (visited[taxi.first][taxi.second] == 0) {
-        flag = false;
-        return;
-    }
-    fuel = fuel - (visited[taxi.first][taxi.second] - 1);
-    people[taxi.first][taxi.second] = 0;
-    if (fuel <= 0) {
-        flag = false;
-    }
+			if (ny < 0 || ny >= N || nx < 0 || nx >= N || visited[ny][nx] || BOARD[ny][nx].second == 1)
+				continue;
+			q.push({ ny,nx });
+			visited[ny][nx] = visited[cy][cx] + 1;
+			guest[BOARD[ny][nx].first].distance = visited[ny][nx] - 1;
+		}
+	}
+	for (int i = 1; i <= M; i++) {
+		if (!guest[i].isDead && visited[guest[i].y][guest[i].x] != 0)
+			guestDistanceList.push_back({ i,guest[i].y, guest[i].x, guest[i].distance, false});
+	}
+	for (int i = 0; i < guestDistanceList.size(); i++) {
+		if (guestDistanceList[i].y == taxi.y && guestDistanceList[i].x == taxi.x) {
+			guestDistanceList[i].distance--;
+		}
+	}
+
+	sort(guestDistanceList.begin(), guestDistanceList.end(), cmp);
 }
 
-void goDes(pair<int, int> t) {
-    int cy = t.first;
-    int cx = t.second;
-    queue<pair<int, int>> q;
-    q.push({cy, cx});
-    visited[cy][cx] = 1;
-
-    while (q.size()) {
-        cy = q.front().first;
-        cx = q.front().second;
-        q.pop();
-
-        for (int dir = 0; dir < 4; dir++) {
-            int ny = cy + dy[dir];
-            int nx = cx + dx[dir];
-            if (ny < 0 || ny >= N || nx < 0 || nx >= N || destination[ny][nx] == -1 || visited[ny][nx])
-                continue;
-            q.push({ny, nx});
-            visited[ny][nx] = visited[cy][cx] + 1;
-        }
-    }
-    for (int i = 0; i < M; i++) {
-        if (deee[i].first == tp) {
-            cy = deee[i].second.first;
-            cx = deee[i].second.second;
-        }
-    }
-    if (visited[cy][cx] == 0) {
-        flag = false;
-        return;
-    }
-    taxi = {cy, cx};
-    destination[cy][cx] = 0;
-    fuel = fuel - (visited[cy][cx] - 1);
-    if (fuel < 0) {
-        flag = false;
-        return;
-    }
-    fuel += (visited[cy][cx] - 1) * 2;
+void display() {
+	for (int y = 0; y < N; y++) {
+		for (int x = 0; x < N; x++) {
+			cout << BOARD[y][x].first << ' ';
+		}
+		cout << '\n';
+	}
+	cout << '\n';
 }
 
-void checkPeople() {
-    for (int y = 0; y < N; y++) {
-        for (int x = 0; x < N; x++) {
-            if (people[y][x] != -1 && people[y][x] != -1 && destination[y][x] != 0 && destination[y][x] != -1)
-                flag = false;
-        }
-    }
+bool getGuest() {
+	if (taxi.fuel < guestDistanceList[0].distance) {
+		return false;
+	}
+	taxi.y = guestDistanceList[0].y;
+	taxi.x = guestDistanceList[0].x;
+	BOARD[taxi.y][taxi.x].first = 0;
+	BOARD[taxi.y][taxi.x].second = 0;
+	guest[guestDistanceList[0].idx].isDead = true;
+	return true;
+}
+
+int goDestination() {
+	fill(&visited[0][0], &visited[0][0] + 21 * 21, 0);
+	queue<pair<int,int>> q;
+	q.push({ taxi.y, taxi.x });
+	visited[taxi.y][taxi.x] = 1;
+
+	while (q.size()) {
+		int cy = q.front().first;
+		int cx = q.front().second;
+		q.pop();
+		if (destination[guestDistanceList[0].idx].y == cy && destination[guestDistanceList[0].idx].x == cx) {
+			return visited[cy][cx] - 1;
+		}
+		for (int dir = 0; dir < 4; dir++) {
+			int ny = cy + dy[dir];
+			int nx = cx + dx[dir];
+
+			if (ny < 0 || ny >= N || nx < 0 || nx >= N || visited[ny][nx] || BOARD[ny][nx].second == 1)
+				continue;
+			q.push({ ny,nx });
+			visited[ny][nx] = visited[cy][cx] + 1;
+		}
+	}
+	return -1;
+}
+
+bool getDestination() {
+	int usedFuel = goDestination();
+	if (usedFuel == -1)
+		return false;
+	if (taxi.fuel - guestDistanceList[0].distance < usedFuel)
+		return false;
+	taxi.y = destination[guestDistanceList[0].idx].y;
+	taxi.x = destination[guestDistanceList[0].idx].x;
+	destination[guestDistanceList[0].idx].isDead = true;
+	BOARD[guestDistanceList[0].y][guestDistanceList[0].x].first = 0;
+	BOARD[guestDistanceList[0].y][guestDistanceList[0].x].second = 0;
+	taxi.fuel = taxi.fuel - guestDistanceList[0].distance - usedFuel + (usedFuel * 2); 
+	return true;
 }
 
 void solve() {
-    for (int i = 0; i < M; i++) {
-        fill(&visited[0][0], &visited[0][0] + 21 * 21, 0);
-        takePeople(taxi);
-        fill(&visited[0][0], &visited[0][0] + 21 * 21, 0);
-        goDes(taxi);
-        if (!flag) {
-            break;
-        }
-    }
-    checkPeople();
-    if (!flag) {
-        cout << "-1" << "\n";
-        return;
-    }
-    cout << fuel << "\n";
+	while (true) {
+		if (!isDead())
+			break;
+		findGuest();
+		if (guestDistanceList.size() == 0) {
+			cout << -1;
+			return;
+		}
+		if (!getGuest()) {
+			cout << -1;
+			return;
+		}
+		if (!getDestination()) {
+			cout << -1;
+			return;
+		}
+	}
+	cout << taxi.fuel;
 }
 
-int main(void) {
-    FastIO();
-    Init();
-    solve();
-    return 0;
+int main() {
+	FastIO();
+	Init();
+	solve();
+	return 0;
 }
