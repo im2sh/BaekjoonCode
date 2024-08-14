@@ -55,7 +55,7 @@ public class Solution {
     }
 
     static void solve(int idx){
-        if(ingredient.size() != 0) {
+        if(ingredient.size() > 1) {
             cal();
         }
 
