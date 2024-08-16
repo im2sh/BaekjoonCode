@@ -7,6 +7,7 @@ import java.util.StringTokenizer;
 
 public class Solution {
     static int TC;
+    static int minNum = Integer.MAX_VALUE;
     static BufferedReader br = new BufferedReader(new BufferedReader(new InputStreamReader(System.in)));
     static StringTokenizer st;
     static StringBuilder sb = new StringBuilder();
@@ -24,12 +25,13 @@ public class Solution {
     public static void Init() throws IOException {
         TC = Integer.parseInt(br.readLine());
         q.clear();
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 8; i++) {
             password[i] = 0;
         }
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < 8; i++) {
             password[i] = Integer.parseInt(st.nextToken());
+            minNum = Math.min(minNum, password[i]);
         }
     }
 
@@ -54,8 +56,8 @@ public class Solution {
 
     public static void solve() {
         for (int i = 0; i < 8; i++) {
-            password[i] %= 60;
-            q.offer(password[i]);
+            password[i] -= (minNum / 15) * 15;
+            q.offer(password[i] + 15);
         }
 
         int minusNum = 1;
