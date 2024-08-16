@@ -45,6 +45,8 @@ public class Solution {
             if(cur <= 0)
                 zeroFlag = true;
         }
+        if(flag)
+            return true;
         if(!zeroFlag)
             return true;
         return false;
@@ -52,7 +54,7 @@ public class Solution {
 
     public static void solve() {
         for (int i = 0; i < 8; i++) {
-            password[i] %= 120;
+            password[i] %= 60;
             q.offer(password[i]);
         }
 
