@@ -5,78 +5,62 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class Solution {
-    static int TC, N, L, T, K;
-    static BufferedReader br = new BufferedReader(new BufferedReader(new InputStreamReader(System.in)));
+    static int TC, N, L, ret;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static StringTokenizer st;
-    static Info maxIngredient;
-    static ArrayList<Info> info = new ArrayList<>();
-    static ArrayList<Info> ingredient = new ArrayList<>();
-    static boolean[] visited = new boolean[21];
+    static StringBuilder sb = new StringBuilder();
+    static ArrayList<Food> foodList = new ArrayList<>();
     public static void main(String[] args) throws IOException {
         TC = Integer.parseInt(br.readLine());
-        for(int i = 1; i <= TC; i++){
+        for(int T = 1; T <= TC; T++){
             Init();
-            solve(0);
-            System.out.println("#" + i + " " + maxIngredient.score);
+            solve();
+            sb.append("#").append(T).append(" ").append(ret).append("\n");
         }
+        System.out.print(sb);
     }
 
-    static void Init() throws IOException {
-        info.clear();
-        maxIngredient = new Info(0,0);
-        for(int i = 0; i < 21; i++)
-            visited[i] = false;
-
-        st = new StringTokenizer(br.readLine(), " ");
+    private static void Init() throws IOException {
+        ret = 0;
+        foodList.clear();
+        st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         L = Integer.parseInt(st.nextToken());
 
         for(int i = 0; i < N; i++){
-            st = new StringTokenizer(br.readLine(), " ");
-            T = Integer.parseInt(st.nextToken());
-            K = Integer.parseInt(st.nextToken());
-            info.add(new Info(T,K));
+            st = new StringTokenizer(br.readLine());
+            Food food = new Food(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+            foodList.add(food);
         }
     }
 
-    static void cal(){
-        int calSum = 0;
-        int favoriteSum = 0;
-        for(int i = 0; i < ingredient.size(); i++){
-            calSum += ingredient.get(i).cal;
-            favoriteSum += ingredient.get(i).score;
-        }
+    private static void solve(){
+        for(int i = 0; i < (1 << N); i++){
+            int taste = 0;
+            int cal = 0;
+            boolean flag = true;
 
-        if(calSum <= L){
-            if(maxIngredient.score < favoriteSum) {
-                maxIngredient.score = favoriteSum;
+            for(int j = 0; j < N; j++){
+                if((i & (1 << j)) != 0){
+                    taste += foodList.get(j).taste;
+                    cal += foodList.get(j).cal;
+                    if(cal > L) {
+                        flag = false;
+                        break;
+                    }
+                }
             }
+            if(flag)
+                ret = Math.max(ret, taste);
         }
     }
-
-    static void solve(int idx){
-        if(ingredient.size() > 1) {
-            cal();
-        }
-
-        for(int i = idx; i < N; i++){
-            if(!visited[i]){
-                visited[i] = true;
-                ingredient.add(info.get(i));
-                solve(i+1);
-                ingredient.remove(ingredient.size()-1);
-                visited[i] = false;
-            }
-        }
-    }
-
 }
 
-class Info{
-    int score,cal;
+class Food {
+    int taste, cal;
 
-    public Info(int T, int K) {
-        this.score = T;
-        this.cal = K;
+    public Food(int taste, int cal) {
+        this.taste = taste;
+        this.cal = cal;
     }
 }
