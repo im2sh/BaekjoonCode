@@ -43,7 +43,7 @@ public class Solution {
             for(int x = 0; x < N; x++){
                 int k = 0;
                 while(true){
-                    if(k > 20)
+                    if(k > N)
                         break;
                     int houseCnt = 0;
                     int serviceAmount = ((k + 1) * (k + 1)) + (k * k);
