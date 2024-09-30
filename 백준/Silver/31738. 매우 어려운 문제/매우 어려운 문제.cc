@@ -20,13 +20,9 @@ void solve() {
     if (N > M)
         cout << 0;
     else {
-        if (N == 1)
-            cout << 1;
-        else {
-            for (long long i = 2; i <= N; i++)
-                ret = (ret * i) % M;
-            cout << ret;
-        }
+        for (long long i = 2; i <= N; i++)
+            ret = (ret * i) % M;
+        cout << ret;
     }
 }
 
