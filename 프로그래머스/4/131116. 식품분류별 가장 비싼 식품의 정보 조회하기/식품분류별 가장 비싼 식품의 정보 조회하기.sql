@@ -1,7 +1,9 @@
--- 코드를 입력하세요
-SELECT F.CATEGORY, F.PRICE AS MAX_PRICE, F.PRODUCT_NAME
-FROM FOOD_PRODUCT F
-WHERE F.CATEGORY in ('과자','국','김치','식용유') and(F.CATEGORY, F.PRICE) IN (SELECT F.CATEGORY, MAX(F.PRICE)
-                                FROM FOOD_PRODUCT F
-                                GROUP BY F.CATEGORY)
-ORDER BY F.PRICE DESC;
+# # -- 코드를 입력하세요
+SELECT CATEGORY, PRICE AS MAX_PRICE, PRODUCT_NAME
+FROM FOOD_PRODUCT
+WHERE (CATEGORY, PRICE) IN (SELECT CATEGORY, MAX(PRICE)
+                                FROM FOOD_PRODUCT
+                                WHERE CATEGORY IN ('과자','국','김치','식용유')
+                                GROUP BY CATEGORY
+                                HAVING MAX(PRICE))
+ORDER BY MAX_PRICE DESC;
