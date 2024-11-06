@@ -24,7 +24,7 @@ void Init() {
 
 void solve() {
     for (int i = 0; i < N; i++) {
-        DP[i + 1] = max(DP[i + 1], DP[i]);
+        DP[i] = max(DP[i - 1], DP[i]);
         if (company[i].first + i > N)
             continue;
         DP[i + company[i].first] = max(DP[company[i].first + i], company[i].second + DP[i]);
