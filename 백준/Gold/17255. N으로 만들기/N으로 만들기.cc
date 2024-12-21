@@ -22,13 +22,11 @@ void go(int left, int right, string str, string path) {
         return;
     }
 
-    if (left - 1 >= 0) {
+    if (left - 1 >= 0)
         go(left - 1, right, S[left - 1] + str, path + S[left - 1] + str);
-    }
 
-    if (right + 1 < S.length()) {
+    if (right + 1 < S.length())
         go(left, right + 1, str + S[right + 1], path + str + S[right + 1]);
-    }
 }
 
 void solve() {
@@ -39,6 +37,7 @@ void solve() {
         str += S[i];
         go(i, i, str, path);
     }
+    
     if (ret.size())
         cout << ret.size();
 }
