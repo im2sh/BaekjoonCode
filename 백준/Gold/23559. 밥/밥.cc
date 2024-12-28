@@ -37,7 +37,6 @@ void Init() {
 void solve() {
     for (int i = 0; i < N; i++) {
         int remainDay = N - i - 1;
-
         if (menus[i].gap <= 0) {
             ret += menus[i].B;
             X -= 1000;
