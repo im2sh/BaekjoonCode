@@ -28,7 +28,11 @@ void solve() {
         ll num = S * K * (M - 1) / 2;
         num += S * (S - M) / 2;
 
-        cout << (D / num) * num << '\n';
+        int ret = D / num;
+        if (ret == 0)
+            cout << -1 << '\n';
+        else
+            cout << ret * num << '\n';
     }
 }
 
